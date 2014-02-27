@@ -6,8 +6,12 @@ class nfs::client::redhat::service {
   Service {
     require => Class['nfs::client::redhat::configure']
   }
-
-  service {"nfslock":
+  if $::operatingsystem == 'Fedora' and $::osmajor == 20 {
+    $nfslock = 'nfs-lock'
+  } else {
+    $nfslock = 'nfslock'
+  }
+  service {$nfslock:
     ensure     => running,
     enable    => true,
     hasstatus => true,
@@ -20,8 +24,8 @@ class nfs::client::redhat::service {
   service { "netfs":
     enable  => true,
     require => $nfs::client::redhat::osmajor ? {
-      6 => Service["nfslock"],
-      5 => [Service["portmap"], Service["nfslock"]],
+      6 => Service[$nfslock],
+      5 => [Service["portmap"], Service[$nfslock]],
     },
   }
 
