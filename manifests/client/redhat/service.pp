@@ -25,14 +25,13 @@ class nfs::client::redhat::service {
 
   if $::operatingsystem != 'Fedora'
       or $nfs::client::redhat::osmajor != 20 {
-        service { "netfs":
-          enable  => true,
-          require => $nfs::client::redhat::osmajor ? {
-            6 => Service[$nfslock],
-            5 => [Service["portmap"], Service[$nfslock]],
-          },
-        }
-     }
+    service { "netfs":
+      enable  => true,
+      require => $nfs::client::redhat::osmajor ? {
+        6 => Service[$nfslock],
+        5 => [Service["portmap"], Service[$nfslock]],
+      },
+    }
   }
 
   if $nfs::client::redhat::osmajor == 20 {
@@ -59,4 +58,5 @@ class nfs::client::redhat::service {
   } else {
     fail("unsupported nfs::client::redhat::osmajor: '${nfs::client::redhat::osmajor}'")
   }
+  
 }

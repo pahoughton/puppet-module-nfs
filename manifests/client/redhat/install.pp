@@ -10,7 +10,8 @@ class nfs::client::redhat::install {
     ensure => present,
   }
 
-  if $nfs::client::redhat::osmajor == 6 {
+  if $nfs::client::redhat::osmajor == 6
+      or $nfs::client::redhat::osmajor == 20 {
     package {'rpcbind':
       ensure => present,
     }
@@ -18,5 +19,7 @@ class nfs::client::redhat::install {
     package { 'portmap':
       ensure => present,
     }
+  } else {
+    fail("unsupported nfs::client::redhat::osmajor: '${nfs::client::redhat::osmajor}'")
   }
 }
