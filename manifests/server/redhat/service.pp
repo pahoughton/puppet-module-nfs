@@ -1,7 +1,11 @@
 class nfs::server::redhat::service {
 
+  $service = $::operatingsystem ? {
+    'Fedora' => 'nfs-server',
+    default  => 'nfs',
+  }
   if $nfs::server::redhat::nfs_v4 == true {
-      service {"nfs":
+      service { $service :
         ensure     => running,
         enable     => true,
         hasrestart => true,
@@ -10,7 +14,7 @@ class nfs::server::redhat::service {
         subscribe  => [ Concat['/etc/exports'], Augeas['/etc/idmapd.conf'] ],
       }
     } else {
-      service {"nfs":
+      service { $service :
         ensure     => running,
         enable     => true,
         hasrestart => true,
