@@ -4,7 +4,7 @@
 class nfs::client::redhat::configure {
 
 
-  if $nfs::client::redhat::nfs_v4 {
+  if $nfs::client::redhat::nfs_v4_idmap_domain {
     augeas {
       '/etc/idmapd.conf':
         context => '/files/etc/idmapd.conf/General',

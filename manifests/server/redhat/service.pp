@@ -1,5 +1,6 @@
 class nfs::server::redhat::service {
 
+  # FIXME Augeas['/etc/idmapd.conf']
   if $nfs::server::redhat::nfs_v4 == true {
       service {"nfs":
         ensure     => running,
@@ -7,7 +8,7 @@ class nfs::server::redhat::service {
         hasrestart => true,
         hasstatus  => true,
         require    => Package["nfs-utils"],
-        subscribe  => [ Concat['/etc/exports'], Augeas['/etc/idmapd.conf'] ],
+        subscribe  => [ Concat['/etc/exports'], ],
       }
     } else {
       service {"nfs":
