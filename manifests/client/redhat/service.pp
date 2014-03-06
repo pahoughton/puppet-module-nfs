@@ -32,7 +32,14 @@ class nfs::client::redhat::service {
     },
   }
 
-  if $nfs::client::redhat::osmajor == 6 {
+  if $nfs::client::redhat::osmajor == 20 {
+    service {"rpcbind":
+      ensure    => running,
+      enable    => true,
+      hasstatus => true,
+      require => [Package["rpcbind"], Package["nfs-utils"]],
+    }
+  } elsif $nfs::client::redhat::osmajor == 6 {
     service {"rpcbind":
       ensure    => running,
       enable    => true,
@@ -46,5 +53,8 @@ class nfs::client::redhat::service {
       hasstatus => true,
       require => [Package["portmap"], Package["nfs-utils"]],
     }
+  } else {
+    fail("unsupported nfs::client::redhat::osmajor: '${nfs::client::redhat::osmajor}'")
   }
+  
 }
